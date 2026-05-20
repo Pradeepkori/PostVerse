@@ -22,7 +22,7 @@ export default function PostForm({ post }) {
         if (post) {
             const file = data.image[0] ? await appwriteService.uploadFile(data.image[0]) : null;
 
-            if (file) {
+           if (file) {
                 appwriteService.deleteFile(post.featuredImage);
             }
 
@@ -34,19 +34,40 @@ export default function PostForm({ post }) {
             if (dbPost) {
                 navigate(`/post/${dbPost.$id}`);
             }
-        } else {
-            const file = await appwriteService.uploadFile(data.image[0]);
+        }else {
+
+            const file =
+                await appwriteService.uploadFile(
+                    data.image[0]
+                );
+
+            // const profileFile = await appwriteService.uploadFile(
+            //         data.profileImage[0]
+            //     );
+
+            // if (!profileFile) {
+            //     alert("Profile image upload failed");
+            //     return;
+            // }
 
             if (file) {
-                const fileId = file.$id;
-                data.featuredImage = fileId;
-                const dbPost = await appwriteService.createPost({ ...data, userId: userData.$id });
+
+                const dbPost = await appwriteService.createPost({
+                    ...data,
+                    featuredImage: file.$id,
+                    userId: userData.$id,
+                    username: userData.name,
+                //    userDp: profileFile.$id
+                });
 
                 if (dbPost) {
+
                     navigate(`/post/${dbPost.$id}`);
+
                 }
             }
         }
+        
     };
 
     const slugTransform = useCallback((value) => {
@@ -91,6 +112,15 @@ export default function PostForm({ post }) {
                 <RTE label="Content :" name="content" control={control} defaultValue={getValues("content")} />
             </div>
             <div className="w-1/3 px-2">
+
+                {/* <Input
+                    label="Profile Image :"
+                    type="file"
+                    className="mb-4"
+                    accept="image/png, image/jpg, image/jpeg"
+                    {...register("profileImage", { required: !post })}
+                /> */}
+
                 <Input
                     label="Featured Image :"
                     type="file"

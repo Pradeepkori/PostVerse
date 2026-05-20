@@ -1,6 +1,16 @@
 import conf from '../conf/conf.js';
 import { Client, ID, Databases, Storage, Query } from "appwrite";
 
+const profilesCollectionId =
+  import.meta.env.VITE_APPWRITE_PROFILES_COLLECTION_ID
+
+const likesCollectionId =
+  import.meta.env.VITE_APPWRITE_LIKES_COLLECTION_ID
+
+const commentsCollectionId =
+  import.meta.env.VITE_APPWRITE_COMMENTS_COLLECTION_ID
+
+
 export class Service{
     client = new Client();
     databases;
@@ -14,7 +24,7 @@ export class Service{
         this.bucket = new Storage(this.client);
     }
 
-    async createPost({title, slug, content, featuredImage, status, userId}){
+    async createPost({title, slug, content, featuredImage, status, userId, username, userDp}){
         try {
             return await this.databases.createDocument(
                 conf.appwriteDatabaseId,
@@ -26,6 +36,8 @@ export class Service{
                     featuredImage,
                     status,
                     userId,
+                    username,
+                    userDp
                 }
             )
         } catch (error) {
@@ -33,7 +45,7 @@ export class Service{
         }
     }
 
-    async updatePost(slug, {title, content, featuredImage, status}){
+    async updatePost(slug, {title, content, featuredImage, status, username}){
         try {
             return await this.databases.updateDocument(
                 conf.appwriteDatabaseId,
@@ -44,7 +56,7 @@ export class Service{
                     content,
                     featuredImage,
                     status,
-
+                    username
                 }
             )
         } catch (error) {
@@ -130,8 +142,235 @@ export class Service{
             fileId
         ).toString();
     }
+
+    async likePost(postId, userId, username) {
+
+    try {
+
+        // check existing like
+
+        const existingLike =
+            await this.databases.listDocuments(
+                conf.appwriteDatabaseId,
+                likesCollectionId,
+                [
+                    Query.equal("postId", postId),
+                    Query.equal("userId", userId)
+                ]
+            )
+
+        // if already liked -> unlike
+
+        if (existingLike.documents.length > 0) {
+
+            await this.databases.deleteDocument(
+                conf.appwriteDatabaseId,
+                likesCollectionId,
+                existingLike.documents[0].$id
+            )
+
+            return {
+                liked: false
+            }
+        }
+
+        // otherwise create like
+
+        await this.databases.createDocument(
+            conf.appwriteDatabaseId,
+            likesCollectionId,
+            ID.unique(),
+            {
+                postId,
+                userId,
+                username
+            }
+        )
+
+        return {
+            liked: true
+        }
+
+    } catch (error) {
+
+        console.log(
+            "Appwrite service :: likePost :: error",
+            error
+        )
+    }
 }
 
+    async getLikes(postId) {
+
+    return await this.databases.listDocuments(
+        conf.appwriteDatabaseId,
+        likesCollectionId,
+        [
+        Query.equal("postId", postId)
+        ]
+    )
+    }
+
+    async getLikedUsers(postId) {
+
+    try {
+
+        return await this.databases.listDocuments(
+            conf.appwriteDatabaseId,
+            likesCollectionId,
+            [
+                Query.equal("postId", postId)
+            ]
+        )
+
+    } catch (error) {
+
+        console.log(error)
+
+    }
+}
+
+    async addComment(postId, userId, username, comment) {
+
+    return await this.databases.createDocument(
+        conf.appwriteDatabaseId,
+        commentsCollectionId,
+        ID.unique(),
+        {
+        postId,
+        userId,
+        username,
+        comment
+        }
+    )
+    }
+
+    async getComments(postId) {
+
+    return await this.databases.listDocuments(
+        conf.appwriteDatabaseId,
+        commentsCollectionId,
+        [
+        Query.equal("postId", postId)
+        ]
+    )
+    }
+
+    async createUserProfile({ userId, username, userDp }) {
+        try {
+
+            return await this.databases.createDocument(
+                conf.appwriteDatabaseId,
+                conf.appwriteProfilesCollectionId,
+                ID.unique(),
+                {
+                    userId,
+                    username,
+                    userDp
+                }
+            )
+
+        } catch (error) {
+
+            console.log(
+                "Appwrite service :: createUserProfile :: error",
+                error
+            )
+
+        }
+
+    }
+
+async getUserProfile(userId) {
+
+    try {
+
+        const response =
+            await this.databases.listDocuments(
+                conf.appwriteDatabaseId,
+                conf.appwriteProfilesCollectionId,
+                [
+                    Query.equal("userId", userId)
+                ]
+            )
+
+        return response.documents[0]
+
+    } catch (error) {
+
+        console.log(
+            "Appwrite service :: getUserProfile :: error",
+            error
+        )
+
+    }
+
+}
+
+    async createOrUpdateProfile(userId, username, userDp) {
+        try {
+            const existingProfile =
+            await this.databases.listDocuments(
+                conf.appwriteDatabaseId,
+                profilesCollectionId,
+                [
+                    Query.equal("userId", userId)
+                ]
+            )
+
+            // update existing profile
+            
+            if (existingProfile.documents.length > 0) {
+                
+                return await this.databases.updateDocument(
+                conf.appwriteDatabaseId,
+                profilesCollectionId,
+                existingProfile.documents[0].$id,
+                    {
+                        username,
+                        userDp
+                    }
+                )
+            }
+
+           // create new profile
+
+            return await this.databases.createDocument(
+                conf.appwriteDatabaseId,
+                profilesCollectionId,
+                ID.unique(),
+                {
+                    userId,
+                    username,
+                    userDp
+                }
+            )
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async getUserProfile(userId) {
+        try {
+            const response =
+            await this.databases.listDocuments(
+                conf.appwriteDatabaseId,
+                profilesCollectionId,
+                [
+                    Query.equal("userId", userId)
+                ]
+            )
+
+        return response.documents[0]
+
+        } catch (error) {
+            
+            console.log(error)
+        }
+    }
+
+}
 
 const service = new Service()
 export default service

@@ -14,6 +14,19 @@ import AddPost from "./pages/AddPost.jsx"
 import EditPost from "./pages/EditPost.jsx"
 import Post from "./pages/Post.jsx"
 
+import About from "./pages/About.jsx"
+import Features from "./pages/Features.jsx"
+import Pricing from "./pages/Pricing.jsx"
+import Affiliate from "./pages/Affiliate.jsx"
+import PressKit from "./pages/PressKit.jsx"
+import Help from "./pages/Help.jsx"
+import Contact from "./pages/Contact.jsx"
+import Support from "./pages/Support.jsx"
+import Terms from "./pages/Terms.jsx"
+import Privacy from "./pages/Privacy.jsx"
+import License from "./pages/License.jsx"
+import Profile from "./pages/Profile.jsx"
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -58,6 +71,14 @@ const router = createBrowserRouter([
             ),
         },
         {
+            path: "/profile",
+            element: (
+                <AuthLayout authentication>
+                    <Profile />
+                </AuthLayout>
+            ),
+        },
+        {
             path: "/edit-post/:slug",
             element: (
                 <AuthLayout authentication>
@@ -70,6 +91,51 @@ const router = createBrowserRouter([
             path: "/post/:slug",
             element: <Post />,
         },
+        {
+            path: "/features",
+            element: <Features />
+        },
+        {
+            path: "/pricing",
+            element: <Pricing />
+        },
+        {
+            path: "/affiliate",
+            element: <Affiliate />
+        },
+        {
+            path: "/press-kit",
+            element: <PressKit />
+        },
+        {
+            path: "/help",
+            element: <Help />
+        },
+        {
+            path: "/contact",
+            element: <Contact />
+        },
+        {
+            path: "/support",
+            element: <Support />
+        },
+        {
+            path: "/terms",
+            element: <Terms />
+        },
+        {
+            path: "/privacy",
+            element: <Privacy />
+        },
+        {
+            path: "/license",
+            element: <License />
+        },
+        {
+            path: "/about",
+            element: <About />
+        },
+        
     ],
 },
 ])

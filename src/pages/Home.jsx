@@ -32,16 +32,27 @@ if (!posts || posts.length === 0) {    //changer
     return (
         <div className='w-full py-8'>
             <Container>
-                <div className='flex flex-wrap'>
+                <div
+                    className="
+                        grid
+                        grid-cols-1
+                        sm:grid-cols-2
+                        md:grid-cols-3
+                        lg:grid-cols-4
+                        gap-6
+                    "
+                >
                     {posts.map((post) => (
-                        <div key={post.$id} className='p-2 w-1/4'>
+                        <div key={post.$id} className="w-full">
                             {/* <PostCard {...post} />  */}
                         
-                             <PostCard
+                            <PostCard
                                 $id={post.$id}
                                 title={post.title}
                                 featuredImage={post.featuredImage}
-                             /> 
+                                username={post.username}
+                                userId={post.userId}
+                            />
 
                         </div>
                     ))}

@@ -3,6 +3,7 @@ import {Container, Logo, LogoutBtn} from "../index"
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import logoImage from "../../assets/Simple Letter V Logo.jpg"
 
 function Header() {
 
@@ -34,39 +35,91 @@ function Header() {
       slug: "/add-post",
       active: authStatus,
   },
+  {
+    name: "Profile",
+    slug: "/profile",
+    active: authStatus,
+  },
   ]
 
-  return (
-    <header className='py-3 shadow bg-gray-500'>
-      <Container>
-         <nav className='flex'>
-          <div className='mr-4'>
-            <Link to='/'>
-              <Logo width='70px'   />
 
-              </Link>
-          </div>
-          <ul className='flex ml-auto'>
-            {navItems.map((item) => 
-            item.active ? (
-              <li key={item.name}>
-                <button
+
+  return (
+  <header className="sticky top-0 z-50 bg-[#595959] backdrop-blur-md border-b border-gray-200 shadow-sm rounded-b-2xl">
+
+    <Container>
+
+      <nav className="flex flex-col md:flex-row items-center justify-between py-4 gap-4">
+
+      {/* Logo */}
+      <div className="w-full md:w-auto flex justify-center md:justify-start">
+        <Link
+          to="/"
+          className="flex items-center gap-3"
+        >
+          <img
+            src={logoImage}
+            alt="PostVerse Logo"
+            className="w-[50px] h-[50px] rounded-xl shadow-md"
+          />
+
+          <h1 className="text-2xl font-bold text-yellow-600 tracking-wide hover:text-yellow-500 transition-all duration-300">
+            PostVerse
+          </h1>
+        </Link>
+      </div>
+
+      {/* Nav Items */}
+      <ul className="
+        flex
+        flex-wrap
+        justify-center
+        items-center
+        gap-3
+        md:gap-5
+      ">
+
+        {navItems.map((item) =>
+          item.active ? (
+            <li key={item.name}>
+
+              <button
                 onClick={() => navigate(item.slug)}
-                className='inline-block px-6 py-2 duration-200 hover:bg-blue-100 rounded-full'
-                >{item.name}</button>
-              </li>
-            ) : null
-            )}
-            {authStatus && (
-              <li>
-                <LogoutBtn />
-              </li>
-            )}
-          </ul>
-        </nav>
-      </Container>
-    </header>
-  )
+                className="
+                  px-4
+                  py-2
+                  rounded-full
+                  text-white
+                  text-sm
+                  md:text-base
+                  font-medium
+                  transition-all
+                  duration-300
+                  hover:bg-blue-100
+                  hover:text-blue-600
+                "
+              >
+                {item.name}
+              </button>
+
+            </li>
+          ) : null
+        )}
+
+        {authStatus && (
+          <li className="text-yellow-600">
+            <LogoutBtn />
+          </li>
+        )}
+
+      </ul>
+
+    </nav>
+    </Container>
+
+  </header>
+)
 }
+
 
 export default Header
