@@ -281,32 +281,6 @@ export class Service{
 
     }
 
-async getUserProfile(userId) {
-
-    try {
-
-        const response =
-            await this.databases.listDocuments(
-                conf.appwriteDatabaseId,
-                conf.appwriteProfilesCollectionId,
-                [
-                    Query.equal("userId", userId)
-                ]
-            )
-
-        return response.documents[0]
-
-    } catch (error) {
-
-        console.log(
-            "Appwrite service :: getUserProfile :: error",
-            error
-        )
-
-    }
-
-}
-
     async createOrUpdateProfile(userId, username, userDp) {
         try {
             const existingProfile =

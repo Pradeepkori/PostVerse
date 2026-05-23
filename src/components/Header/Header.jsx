@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import logoImage from "../../assets/Simple Letter V Logo.jpg"
 
-function Header() {
+function Header({darkMode, setDarkMode}) {
 
   const authStatus = useSelector((state) => state.auth.status ) 
   const navigate = useNavigate()
@@ -45,11 +45,11 @@ function Header() {
 
 
   return (
-  <header className="sticky top-0 z-50 bg-[#595959] backdrop-blur-md border-b border-gray-200 shadow-sm rounded-b-2xl">
+  <header className="sticky top-0 z-50 bg-[#595959]  dark:bg-gray-900 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 shadow-sm rounded-b-2xl">
 
     <Container>
 
-      <nav className="flex flex-col md:flex-row items-center justify-between py-4 gap-4">
+      <nav className="flex flex-col md:flex-row items-center justify-between py-3 gap-4">
 
       {/* Logo */}
       <div className="w-full md:w-auto flex justify-center md:justify-start">
@@ -111,6 +111,21 @@ function Header() {
             <LogoutBtn />
           </li>
         )}
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          className="
+            px-3
+            py-2
+            rounded-full
+            bg-black
+            text-white
+            hover:bg-blue-100
+            transition-all
+            duration-300
+          "
+        >
+          {darkMode ? "☀️" : "🌙"}
+        </button>
 
       </ul>
 

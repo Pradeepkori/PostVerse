@@ -83,8 +83,7 @@ export default function Post() {
 
             <Container>
 
-                <div className="w-full flex justify-center mb-4 relative border rounded-xl p-2">
-
+                <div className="w-full flex justify-center mb-8 relative">
                     <img
                         src={
                             appwriteService.getFilePreview(
@@ -92,7 +91,15 @@ export default function Post() {
                             )
                         }
                         alt={post.title}
-                        className="rounded-xl"
+                        className="
+                         w-full
+                        max-w-5xl
+                        h-[600px]
+                        object-contain
+                        rounded-3xl
+                        shadow-2xl
+                        border
+                        border-gray-300"
                     />
 
                     {isAuthor && (
@@ -123,9 +130,16 @@ export default function Post() {
 
                 </div>
 
-                <div className="w-full mb-6">
+                <div className="w-full mb-6 text-center">
 
-                    <h1 className="text-2xl font-bold">
+                    <h1
+                        className="
+                            text-3xl
+                            font-bold
+                            text-black
+                            dark:text-white
+                        "
+                    >
                         {post.title}
                     </h1>
 
@@ -157,7 +171,14 @@ export default function Post() {
 
                     <div>
 
-                        <p className="font-semibold text-lg">
+                        <p
+                            className="
+                                font-semibold
+                                text-lg
+                                text-black
+                                dark:text-white
+                            "
+                        >
                             {post.username}
                         </p>
 
@@ -165,7 +186,14 @@ export default function Post() {
 
                 </div>
 
-                <div className="browser-css">
+                <div
+                    className="
+                        browser-css
+                        text-black
+                        dark:text-gray-200
+                        leading-8
+                    "
+                >
 
                     {parse(post.content)}
 

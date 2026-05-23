@@ -96,10 +96,12 @@ function PostCard({ $id, title, featuredImage, username, userId }) {
 
   return (
 
-    <div
-      className="
+    <div className="
         w-full
         bg-slate-300
+        dark:bg-gray-800
+        text-gray-800
+        dark:text-white
         rounded-xl
         p-4
         transition
@@ -148,6 +150,7 @@ function PostCard({ $id, title, featuredImage, username, userId }) {
               className="
                 font-semibold
                 text-gray-800
+                dark:text-white
                 text-base
               "
             >
@@ -187,6 +190,7 @@ function PostCard({ $id, title, featuredImage, username, userId }) {
             text-xl
             font-bold
             text-gray-800
+            dark:text-white
             text-center
           "
         >
@@ -351,6 +355,7 @@ function PostCard({ $id, title, featuredImage, username, userId }) {
                   key={item.$id}
                   className="
                     bg-white
+                    dark:bg-gray-700
                     p-3
                     rounded-lg
                     shadow-sm
@@ -361,7 +366,7 @@ function PostCard({ $id, title, featuredImage, username, userId }) {
                     {item.username}
                   </p>
 
-                  <p className="text-gray-700">
+                  <p className="text-gray-700 dark:text-white">
                     {item.comment}
                   </p>
 
@@ -371,7 +376,7 @@ function PostCard({ $id, title, featuredImage, username, userId }) {
 
             ) : (
 
-              <p className="text-gray-500">
+              <p className="text-gray-500 dark:text-white italic">
                 No comments yet
               </p>
 
@@ -394,6 +399,7 @@ function PostCard({ $id, title, featuredImage, username, userId }) {
               rounded-lg
               p-2
               outline-none
+              text-black
             "
           />
 

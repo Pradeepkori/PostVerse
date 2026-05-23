@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 export default function PostForm({ post }) {
-    const { register, handleSubmit, watch, setValue, control, getValues } = useForm({
+    const { register, handleSubmit, watch, setValue, control, getValues, formState:{ errors } } = useForm({
         defaultValues: {
             title: post?.title || "",
             slug: post?.$id || "",
@@ -35,6 +35,11 @@ export default function PostForm({ post }) {
                 navigate(`/post/${dbPost.$id}`);
             }
         }else {
+
+            if (!data.image || data.image.length === 0) {
+                alert("Please select an image before submitting the post")
+                return
+            }
 
             const file =
                 await appwriteService.uploadFile(
@@ -126,8 +131,9 @@ export default function PostForm({ post }) {
                     type="file"
                     className="mb-4"
                     accept="image/png, image/jpg, image/jpeg, image/gif"
-                    {...register("image", { required: !post })}
+                    {...register("image")}
                 />
+
                 {post && (
                     <div className="w-full mb-4">
                         <img
